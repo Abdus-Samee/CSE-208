@@ -38,4 +38,28 @@ public class Graph {
 
         this.visited[i] = 2;
     }
+    
+    public void connectedComponent(int s){
+        this.visited = new int[this.n];
+        ArrayList<Integer> queue = new ArrayList<>();
+        ArrayList<Integer> ans = new ArrayList<>();
+        queue.add(s);
+
+        while(!queue.isEmpty()){
+            int node = queue.remove(0);
+
+            if(this.visited[node] == 0){
+                this.visited[node] = 1;
+                ans.add(node);
+            }
+
+            ArrayList<Integer> edges = this.adjacencyList.get(node);
+            for(int i : edges){
+                if(this.visited[i] == 0) queue.add(i);
+            }
+        }
+
+        System.out.println("Connected components");
+        for(int i : ans) System.out.printf(" " + i);
+    }
 }
