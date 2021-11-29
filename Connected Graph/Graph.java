@@ -39,6 +39,9 @@ public class Graph {
         this.visited[i] = 2;
     }
     
+    /*
+    *call this from within a loop to get all the connected components
+    */
     public void connectedComponent(int s){
         this.visited = new int[this.n];
         ArrayList<Integer> queue = new ArrayList<>();
