@@ -48,4 +48,22 @@ public class Graph {
         
         return -1;
     }
+    
+    /*
+    * Complexity: O(E+V)
+    */
+    
+    public optimizedDfsUtil(){
+        int root = -1;
+        for(int i = 0; i < this.n; i++){
+            if(this.visited[i] == 0) dfs(i);
+            root = i;
+        }
+        
+        this.visited = new int[this.n];
+        dfs(root);
+        
+        if(check()) return 1;
+        else return -1;
+    }
 }
