@@ -17,7 +17,7 @@ public class Graph {
         this.ds = new DisjointSet(size);
         this.visited = new int[size];
 
-        for(int i = 0; i <= size; i++) this.adjacencyList.add(new ArrayList<>());
+        for(int i = 0; i < size; i++) this.adjacencyList.add(new ArrayList<>());
     }
 
     public double getCost() { return this.cost; }
@@ -32,6 +32,8 @@ public class Graph {
             this.v = v;
             this.w = w;
         }
+
+        public double getWeight(){ return  this.w; }
 
         public int either(){ return this.u; }
 
@@ -113,5 +115,18 @@ public class Graph {
         }
 
         return ans;
+    }
+
+    public void eagerPrim(){
+        EagerPrim eagerPrim = new EagerPrim(this.adjacencyList);
+
+        if(!eagerPrim.mstExists()) System.out.println("No MST exists...");
+        else{
+            System.out.println("MST cost: " + eagerPrim.getMstCost());
+            System.out.println("MST edges:");
+            for(Edge e : eagerPrim.getMst()){
+                System.out.println(String.format("(%d %d %f)", e.u, e.v, e.w));
+            }
+        }
     }
 }
