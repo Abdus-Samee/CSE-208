@@ -1,117 +1,56 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
 
-public class Graph {
-    private int n;
-    private double cost = 0;
-    private List<ArrayList<Edge>> adjacencyList;
-    private PriorityQueue<Edge> queue;
-    private ArrayList<Edge> edgeList;
-    private DisjointSet ds;
-    private int[] visited;
+public class Main {
+    public static void main(String[] args) {
+        try {
+            int c = 0, n = 0, m = 0;
+            Graph g = null;
+            BufferedReader reader = new BufferedReader(new FileReader("mst.in"));
 
-    public Graph(int size){
-        this.n = size;
-        this.adjacencyList = new ArrayList<>();
-        this.queue = new PriorityQueue<>();
-        this.edgeList = new ArrayList<>();
-        this.ds = new DisjointSet(size);
-        this.visited = new int[size];
+            while(true){
+                String in = reader.readLine();
+                if(in == null) break;
 
-        for(int i = 0; i <= size; i++) this.adjacencyList.add(new ArrayList<>());
-    }
+                String[] input = in.split(" ");
 
-    public double getCost() { return this.cost; }
+                if(c == 0){
+                    n = Integer.parseInt(input[0]);
+                    m = Integer.parseInt(input[1]);
+                    g = new Graph(n);
+                    c++;
+                }else{
+                    int u = Integer.parseInt(input[0]);
+                    int v = Integer.parseInt(input[1]);
+                    double w = Double.parseDouble(input[2]);
 
-    public class Edge implements Comparable{
-        private int u;
-        private int v;
-        private double w;
-
-        public Edge(int u, int v, double w){
-            this.u = u;
-            this.v = v;
-            this.w = w;
-        }
-
-        public int either(){ return this.u; }
-
-        public int other(int node){
-            if(node == this.u) return this.v;
-
-            return this.u;
-        }
-
-        @Override
-        public int compareTo(Object o) {
-            Edge edge = (Edge) o;
-            int u = edge.either();
-            int v = edge.other(u);
-
-            if (this.w < edge.w) return -1;
-            else if (this.w > edge.w) return 1;
-            else{
-                if(this.u < u) return -1;
-                else if(this.u > u) return 1;
-                else if(this.v < v) return -1;
-                else if(this.v > v) return 1;
-                else return 0;
+                    g.addEdge(u, v, w);
+                }
             }
-        }
-    }
 
-    public void addEdge(int from, int to, double weight){
-        Edge edge = new Edge(from, to, weight);
-        this.adjacencyList.get(from).add(edge);
-        this.adjacencyList.get(to).add(edge);
-        this.edgeList.add(edge);
-    }
+            reader.close();
 
-    public void visit(int s){
-        this.visited[s] = 1;
-        ArrayList<Edge> edges =this.adjacencyList.get(s);
-        for(Edge edge : edges){
-            if(this.visited[edge.other(s)] == 0) this.queue.add(edge);
-        }
-    }
-
-    public ArrayList<Edge> mst(int s){
-        this.visited[s] = 1;
-        ArrayList<Edge> ans = new ArrayList<>();
-        ArrayList<Edge> edges = this.adjacencyList.get(s);
-        for(Edge e : edges) this.queue.add(e);
-
-        while(!this.queue.isEmpty() && ans.size() < this.n){
-            Edge edge = this.queue.peek();
-            this.queue.remove();
-            int u = edge.either();
-            int v = edge.other(u);
-            if(this.visited[u] == 1 && this.visited[v] ==1) continue;
-
-            ans.add(edge);
-            this.cost += edge.w;
-
-            if(this.visited[u] == 0) visit(u);
-            if(this.visited[v] == 0) visit(v);
-        }
-
-        return ans;
-    }
-
-    public ArrayList<Edge> kruskal(){
-        ArrayList<Edge> ans = new ArrayList<>();
-        Collections.sort(this.edgeList);
-
-        while(!this.edgeList.isEmpty() && ans.size() < this.n-1){
-            Edge edge = this.edgeList.remove(0);
-            int u = edge.either();
-            int v = edge.other(u);
-
-            if(!this.ds.isConnected(u, v)){
-                this.ds.union(u, v);
-                ans.add(edge);
+            ArrayList<Graph.Edge> ansPrim = g.mst(0);
+            System.out.println("Cost of the minimum spanning tree: " + g.getCost());
+            System.out.printf("List of edges selected by Prim's: { ");
+            for(Graph.Edge e : ansPrim){
+                int u = e.either();
+                int v = e.other(u);
+                System.out.printf("(" + u + ", " + v + ") ");
             }
-        }
+            System.out.printf("}\n");
 
-        return ans;
+            ArrayList<Graph.Edge> ansKruskal = g.kruskal();
+            System.out.printf("List of edges selected by Kruskal's: { ");
+            for(Graph.Edge e : ansKruskal){
+                int u = e.either();
+                int v = e.other(u);
+                System.out.printf("(" + u + ", " + v + ") ");
+            }
+            System.out.printf("}\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
