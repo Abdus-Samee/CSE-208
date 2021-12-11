@@ -5,6 +5,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             int c = 0, n = 0, m = 0, s = 0, d = 0;
+            boolean dijkstra = true;
             Graph g = null;
             BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
 
@@ -26,6 +27,8 @@ public class Main {
                     c++;
 
                     g.addEdge(u, v, w);
+
+                    if(w < 0) dijkstra = false;
                 }else{
                     s = Integer.parseInt(input[0]);
                     d = Integer.parseInt(input[1]);
@@ -34,7 +37,8 @@ public class Main {
 
             reader.close();
 
-            g.dijkstra(s, d);
+            if(dijkstra) g.dijkstra(s, d);
+            else g.bellmanFord(s, d);
         } catch (Exception e) {
             e.printStackTrace();
         }
