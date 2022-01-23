@@ -17,12 +17,14 @@ public class Main {
                 String instruction = input[0];
 
                 if(instruction.equals("INS")) binomialHeap.insert(Integer.parseInt(input[1]));
-                else if(instruction.equals("PRI")) binomialHeap.levelOrderTraversal();
+                else if(instruction.equals("PRI")) binomialHeap.print();
                 else if(instruction.equals("EXT")){
                     BinomialNode max = binomialHeap.extractMax();
                     System.out.println("ExtractMax returned " + max.data);
                 }else if(instruction.equals("FIN")){
                     System.out.println("FindMax returned " + binomialHeap.findMax());
+                }else if(instruction.equals("INC")){
+                    binomialHeap.increaseKey(Integer.parseInt(input[1]), Integer.parseInt(input[2]));
                 }
             }
 
