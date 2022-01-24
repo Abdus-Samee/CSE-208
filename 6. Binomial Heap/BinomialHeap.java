@@ -32,7 +32,7 @@ public class BinomialHeap {
 
     public BinomialHeap union(BinomialHeap binomialHeap){
         BinomialHeap newheap = mergeBinomialHeaps(binomialHeap);
-        if(newheap == null) return null;
+        if(newheap.head == null) return null;
 
         BinomialNode prev = null;
         BinomialNode cur = newheap.head;
@@ -58,7 +58,7 @@ public class BinomialHeap {
                 }
             }
 
-            next = next.rightSibling;
+            next = cur.rightSibling;
         }
 
         return newheap;
@@ -120,7 +120,7 @@ public class BinomialHeap {
 
         //removing max node from heap
         BinomialNode cur = this.head;
-        BinomialNode prev = null;
+        BinomialNode prev = cur;
         BinomialNode max = this.head;
         BinomialNode prevMax =  null;
         while(cur != null){
@@ -132,16 +132,26 @@ public class BinomialHeap {
             cur = cur.rightSibling;
         }
 
-        if(prevMax == null) this.head = this.head.rightSibling;
+        if(prevMax == null || prev == null) this.head = this.head.rightSibling;
         else prevMax.rightSibling = max.rightSibling;
 
         //correcting the heap
         this.n -= 1;
+        BinomialHeap b = new BinomialHeap();
         if(max.leftChild != null){
-            BinomialHeap childHeap = new BinomialHeap();
-            childHeap.head = max.leftChild;
-            BinomialHeap newHeap = union(childHeap);
-            this.head = newHeap.head;
+            BinomialNode child = max.leftChild;
+            BinomialNode next = null;
+            while(child != null){
+                next = child.rightSibling;
+                child.rightSibling = null;
+                BinomialHeap childHeap = new BinomialHeap();
+                childHeap.head = child;
+                BinomialHeap newHeap = b.union(childHeap);
+                b.head= newHeap.head;
+                child = next;
+            }
+            BinomialHeap heap = union(b);
+            this.head = heap.head;
         }
 
         //updating maximum value
