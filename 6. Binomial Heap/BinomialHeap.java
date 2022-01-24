@@ -222,37 +222,26 @@ public class BinomialHeap {
 
         BinomialNode cur = this.head;
         while(cur != null){
-            ArrayList<ArrayList<BinomialNode>> res = levelOrderTraversal(cur.leftChild);
-            System.out.println("Binomial Tree, B" + res.size());
+            System.out.println("Binomial Tree, B" + cur.degree);
             System.out.println("Level 0 : " + cur.data);
-            for(int i = 0; i < res.size(); i++){
-                System.out.printf("Level " + (i+1) + " :");
-                for(BinomialNode node : res.get(i)) System.out.printf(" " + node.data);
-                System.out.println();
-            }
+            levelOrderTraversal(cur.leftChild);
             cur = cur.rightSibling;
         }
         System.out.println("-------------------------");
     }
 
-    public ArrayList<ArrayList<BinomialNode>> levelOrderTraversal(BinomialNode cur){
+    public void levelOrderTraversal(BinomialNode cur){
         int level = 1;
-        ArrayList<ArrayList<BinomialNode>> levelNodes = new ArrayList<>();
         while(cur != null){
-            //System.out.printf("Level " + level + " : ");
+            System.out.printf("Level " + level + " :");
             BinomialNode node = cur;
-            ArrayList<BinomialNode> arr = new ArrayList<>();
             while(node != null){
-                //System.out.printf(" " + node.data);
-                arr.add(node);
+                System.out.printf(" " + node.data);
                 node = node.rightSibling;
             }
+            System.out.println();
             level += 1;
-            levelNodes.add(arr);
             cur = cur.leftChild;
         }
-
-        //System.out.println("Binomial Tree, B" + level);
-        return levelNodes;
     }
 }
