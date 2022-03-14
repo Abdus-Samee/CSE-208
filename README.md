@@ -1,5 +1,5 @@
 # CSE-208
-Collection of programs regarding DSA Lab -II
+Collection of programs from DSA Lab - II
 
 The codes are separated in various branches
  - main(Miscellaneous codes)
